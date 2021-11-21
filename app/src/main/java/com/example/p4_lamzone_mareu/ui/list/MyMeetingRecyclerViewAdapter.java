@@ -1,5 +1,6 @@
 package com.example.p4_lamzone_mareu.ui.list;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,16 +8,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.p4_lamzone_mareu.R;
+import com.example.p4_lamzone_mareu.di.DI;
 import com.example.p4_lamzone_mareu.events.DeleteMeetingEvent;
 import com.example.p4_lamzone_mareu.model.Meeting;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,14 +42,23 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
         return new ViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Meeting meeting = mMeetings.get(position);
-        holder.mNeighbourName.setText(meeting.getSubject());
-        Glide.with(holder.mNeighbourAvatar.getContext())
+
+        String meetingStartAt = DI.getMeetingApiService().getStringStartAt(meeting);
+
+        String resumeDatas =
+                meeting.getSubject() + " - " + meetingStartAt + " - " +meeting.getMeetingRoom();
+        holder.mMeetingResumeDatas.setText(resumeDatas);
+
+        holder.mMeetingAttendees.setText(String.join(", ", meeting.getAllAttendees()));
+
+        Glide.with(holder.mMeetingAvatar.getContext())
                 .load(meeting.getSubject())
                 .apply(RequestOptions.circleCropTransform())
-                .into(holder.mNeighbourAvatar);
+                .into(holder.mMeetingAvatar);
 
         holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,9 +75,11 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.item_list_avatar)
-        public ImageView mNeighbourAvatar;
-        @BindView(R.id.item_list_subject)
-        public TextView mNeighbourName;
+        public ImageView mMeetingAvatar;
+        @BindView(R.id.item_list_resume_datas)
+        public TextView mMeetingResumeDatas;
+        @BindView(R.id.item_list_attendees)
+        public TextView mMeetingAttendees;
         @BindView(R.id.item_list_delete_button)
         public ImageButton mDeleteButton;
 

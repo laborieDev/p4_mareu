@@ -23,7 +23,7 @@ public abstract class DummyMeetingGenerator {
             new Meeting(
                     3, "Réunion C", "Luigi",
                     Arrays.asList("anna@email.com", "anthony@email.com"),
-                    getDate(19, 0)
+                    getDate(23, 0)
             )
     );
 
