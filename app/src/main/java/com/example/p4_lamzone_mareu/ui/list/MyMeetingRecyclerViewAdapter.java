@@ -17,11 +17,11 @@ import com.example.p4_lamzone_mareu.R;
 import com.example.p4_lamzone_mareu.di.DI;
 import com.example.p4_lamzone_mareu.events.DeleteMeetingEvent;
 import com.example.p4_lamzone_mareu.model.Meeting;
+import com.example.p4_lamzone_mareu.service.DummyMeetingApiService;
+import com.example.p4_lamzone_mareu.service.MeetingApiService;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.text.DecimalFormat;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeetingRecyclerViewAdapter.ViewHolder> {
 
     private final List<Meeting> mMeetings;
+    private MeetingApiService meetingApiService;
 
     public MyMeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetings = items;
@@ -55,10 +56,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
         holder.mMeetingAttendees.setText(String.join(", ", meeting.getAllAttendees()));
 
-        Glide.with(holder.mMeetingAvatar.getContext())
-                .load(meeting.getSubject())
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.mMeetingAvatar);
+        setMeetingCircle(holder.mMeetingCircle, meeting);
 
         holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,9 +71,19 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
         return mMeetings.size();
     }
 
+    public void setMeetingCircle(ImageView mCircle, Meeting meeting)
+    {
+        if (meeting.getIsImportant()) {
+            Glide.with(mCircle.getContext())
+                    .load(R.drawable.ic_circle_warning)
+                    .apply(RequestOptions.centerInsideTransform())
+                    .into(mCircle);
+        }
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.item_list_avatar)
-        public ImageView mMeetingAvatar;
+        @BindView(R.id.item_list_circle)
+        public ImageView mMeetingCircle;
         @BindView(R.id.item_list_resume_datas)
         public TextView mMeetingResumeDatas;
         @BindView(R.id.item_list_attendees)

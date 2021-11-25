@@ -13,17 +13,20 @@ public abstract class DummyMeetingGenerator {
             new Meeting(
                     1, "Réunion A", "Peach",
                     Arrays.asList("anthony@email.com", "timothe@email.com", "anna@email.com"),
-                    getDate(14, 0)
+                    getDate(14, 0),
+                    true
             ),
             new Meeting(
                     2, "Réunion B", "Mario",
                     Arrays.asList("timothe@email.com", "anna@email.com"),
-                    getDate(16, 0)
+                    getDate(16, 0),
+                    false
             ),
             new Meeting(
                     3, "Réunion C", "Luigi",
                     Arrays.asList("anna@email.com", "anthony@email.com"),
-                    getDate(23, 0)
+                    getDate(23, 0),
+                    false
             )
     );
 
