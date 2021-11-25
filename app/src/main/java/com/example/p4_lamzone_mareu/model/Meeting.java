@@ -1,8 +1,12 @@
 package com.example.p4_lamzone_mareu.model;
 
 import java.io.Serializable;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -25,18 +29,22 @@ public class Meeting implements Serializable {
     /** Start at */
     private Date startAt;
 
+    private boolean isImportant;
+
     public Meeting (
             long id,
             String subject,
             String meetingRoom,
             List<String> allAttendees,
-            Date startAt
+            Date startAt,
+            boolean isImportant
     ) {
         this.id = id;
         this.subject = subject;
         this.meetingRoom = meetingRoom;
         this.allAttendees = allAttendees;
         this.startAt = startAt;
+        this.isImportant = isImportant;
     }
 
     public long getId() {
@@ -83,6 +91,14 @@ public class Meeting implements Serializable {
         this.startAt = startAt;
     }
 
+    public boolean getIsImportant() {
+        return isImportant;
+    }
+
+    public void setIsImportant(boolean isImportant){
+        this.isImportant = isImportant;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -95,5 +111,4 @@ public class Meeting implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }

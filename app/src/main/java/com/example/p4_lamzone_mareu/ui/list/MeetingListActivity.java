@@ -1,5 +1,6 @@
 package com.example.p4_lamzone_mareu.ui.list;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
