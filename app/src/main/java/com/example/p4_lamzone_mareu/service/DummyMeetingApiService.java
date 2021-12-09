@@ -2,12 +2,13 @@ package com.example.p4_lamzone_mareu.service;
 
 import android.os.Build;
 
-import androidx.annotation.RequiresApi;
-
 import com.example.p4_lamzone_mareu.model.Meeting;
+import com.example.p4_lamzone_mareu.model.MeetingRoom;
 
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -17,28 +18,16 @@ import java.util.stream.Collectors;
 public class DummyMeetingApiService implements MeetingApiService {
 
     private List<Meeting> meetings = DummyMeetingGenerator.generateMeetings();
+    private List<MeetingRoom> meetingsRooms = DummyMeetingGenerator.DUMMY_MEETINGS_ROOMS;
 
     /**
      * {@inheritDoc}
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public List<Meeting> getMeetings() {
-        return getMeetingsOrderDate(Meeting::getStartAt);
-    }
+        Collections.sort(meetings);
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public List<Meeting> getMeetingsOrderDate(Function<Meeting, Date> orderDate) {
-        return meetings.stream()
-                .sorted(Comparator.comparing(orderDate))
-                .collect(Collectors.toList());
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public List<Meeting> getMeetingsOrderString(Function<Meeting, String> orderString) {
-        return meetings.stream()
-                .sorted(Comparator.comparing(orderString))
-                .collect(Collectors.toList());
+        return meetings;
     }
 
     /**
@@ -74,5 +63,17 @@ public class DummyMeetingApiService implements MeetingApiService {
         DecimalFormat df = new DecimalFormat("00");
 
         return meetingStartAtDate.getHours() + ":" + df.format(meetingStartAtDate.getMinutes());
+    }
+
+    public MeetingRoom[] getMeetingRooms() {
+        MeetingRoom[] meetingRoomsArray = new MeetingRoom[meetingsRooms.size()];
+        int i = 0;
+
+        for (MeetingRoom meetingRoom : meetingsRooms) {
+            meetingRoomsArray[i] = meetingRoom;
+            i++;
+        }
+
+        return meetingRoomsArray;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.p4_lamzone_mareu.ui.list;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.p4_lamzone_mareu.R;
 import com.example.p4_lamzone_mareu.di.DI;
 import com.example.p4_lamzone_mareu.events.DeleteMeetingEvent;
 import com.example.p4_lamzone_mareu.model.Meeting;
-import com.example.p4_lamzone_mareu.service.DummyMeetingApiService;
 import com.example.p4_lamzone_mareu.service.MeetingApiService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -39,7 +37,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_meeting, parent, false);
+                .inflate(R.layout.viewholder_meeting, parent, false);
         return new ViewHolder(view);
     }
 
@@ -51,12 +49,13 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
         String meetingStartAt = DI.getMeetingApiService().getStringStartAt(meeting);
 
         String resumeDatas =
-                meeting.getSubject() + " - " + meetingStartAt + " - " +meeting.getMeetingRoom();
+                meeting.getSubject() + " - " + meetingStartAt + " - " +meeting.getMeetingRoom().getName();
         holder.mMeetingResumeDatas.setText(resumeDatas);
 
         holder.mMeetingAttendees.setText(String.join(", ", meeting.getAllAttendees()));
 
-        setMeetingCircle(holder.mMeetingCircle, meeting);
+        int meetingRoomColor = Color.parseColor(meeting.getMeetingRoom().getColor());
+        holder.mMeetingCircle.setColorFilter(meetingRoomColor);
 
         holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,16 +68,6 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
     @Override
     public int getItemCount() {
         return mMeetings.size();
-    }
-
-    public void setMeetingCircle(ImageView mCircle, Meeting meeting)
-    {
-        if (meeting.getIsImportant()) {
-            Glide.with(mCircle.getContext())
-                    .load(R.drawable.ic_circle_warning)
-                    .apply(RequestOptions.centerInsideTransform())
-                    .into(mCircle);
-        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
