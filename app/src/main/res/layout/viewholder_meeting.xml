@@ -8,33 +8,22 @@ android:layout_height="wrap_content"
 android:padding="10dp"
 android:orientation="vertical">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/image_section"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constrainedWidth="true"
+    <ImageView
+        android:id="@+id/item_list_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_circle_default"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-        <ImageView
-            android:id="@+id/item_list_circle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_circle_default"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        />
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/datas_section"
         app:layout_constrainedWidth="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toEndOf="@+id/image_section"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@+id/item_list_circle"
         app:layout_constraintEnd_toStartOf="@+id/item_list_delete_button"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -42,27 +31,23 @@ android:orientation="vertical">
         <TextView
             android:id="@+id/item_list_resume_datas"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             tools:text="@string/app_name" />
 
         <TextView
             android:id="@+id/item_list_attendees"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:lines="1"
             android:singleLine="true"
-            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:textStyle="normal"
-            app:layout_constraintTop_toBottomOf="@+id/item_list_resume_datas"
-            app:layout_constraintStart_toStartOf="parent"
             tools:text="@string/app_name"
             tools:ignore="MissingConstraints" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <ImageButton
     android:id="@+id/item_list_delete_button"

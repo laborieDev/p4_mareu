@@ -1,9 +1,0 @@
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <solid
-        android:color="#edd9d0"/>
-    <size
-        android:width="@dimen/list_item_circle"
-        android:height="@dimen/list_item_circle"/>
-</shape>

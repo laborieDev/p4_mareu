@@ -1,6 +1,7 @@
 package com.example.p4_lamzone_mareu.service;
 
 import com.example.p4_lamzone_mareu.model.Meeting;
+import com.example.p4_lamzone_mareu.model.MeetingRoom;
 
 import java.util.Date;
 import java.util.List;
@@ -13,10 +14,6 @@ public interface MeetingApiService {
      * @return {@link List}
      */
     List<Meeting> getMeetings();
-
-    List<Meeting> getMeetingsOrderDate(Function<Meeting, Date> orderDate);
-
-    List<Meeting> getMeetingsOrderString(Function<Meeting, String> orderString);
 
     /**
      * Delete a Meeting
@@ -45,4 +42,5 @@ public interface MeetingApiService {
 
     String getStringStartAt(Meeting meeting);
 
+    MeetingRoom[] getMeetingRooms();
 }

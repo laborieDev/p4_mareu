@@ -1,18 +1,15 @@
 package com.example.p4_lamzone_mareu.model;
 
 import java.io.Serializable;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
  * Model Object a Meeting
  */
-public class Meeting implements Serializable {
+public class Meeting implements Serializable, Comparable<Meeting> {
 
     /** Identifier */
     private long id;
@@ -21,7 +18,7 @@ public class Meeting implements Serializable {
     private String subject;
 
     /** MeetingRoom */
-    private String meetingRoom;
+    private MeetingRoom meetingRoom;
 
     /** All Attendees */
     private List<String> allAttendees;
@@ -29,22 +26,18 @@ public class Meeting implements Serializable {
     /** Start at */
     private Date startAt;
 
-    private boolean isImportant;
-
     public Meeting (
             long id,
             String subject,
-            String meetingRoom,
+            MeetingRoom meetingRoom,
             List<String> allAttendees,
-            Date startAt,
-            boolean isImportant
+            Date startAt
     ) {
         this.id = id;
         this.subject = subject;
         this.meetingRoom = meetingRoom;
         this.allAttendees = allAttendees;
         this.startAt = startAt;
-        this.isImportant = isImportant;
     }
 
     public long getId() {
@@ -63,11 +56,11 @@ public class Meeting implements Serializable {
         this.subject = subject;
     }
 
-    public String getMeetingRoom() {
+    public MeetingRoom getMeetingRoom() {
         return meetingRoom;
     }
 
-    public void setMeetingRoom(String meetingRoom) {
+    public void setMeetingRoom(MeetingRoom meetingRoom) {
         this.meetingRoom = meetingRoom;
     }
 
@@ -91,14 +84,6 @@ public class Meeting implements Serializable {
         this.startAt = startAt;
     }
 
-    public boolean getIsImportant() {
-        return isImportant;
-    }
-
-    public void setIsImportant(boolean isImportant){
-        this.isImportant = isImportant;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -110,5 +95,14 @@ public class Meeting implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public int compareTo(Meeting m) {
+        if (getStartAt() == null || m.getStartAt() == null) {
+            return 0;
+        }
+
+        return getStartAt().compareTo(m.getStartAt());
     }
 }
