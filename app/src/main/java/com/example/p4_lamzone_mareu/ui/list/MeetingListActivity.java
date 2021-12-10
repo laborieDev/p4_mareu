@@ -51,12 +51,12 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
 
     @BindView(R.id.list_neighbours)
     public RecyclerView mRecyclerView;
+    public MyMeetingRecyclerViewAdapter mAdaptor;
 
     private TextInputEditText mEditHourText;
     private int meetingStartHour = 7;
     private int meetingStartMin = 0;
     private MeetingRoom actualMeetingRoomSelected;
-
 
     @Override
     @Nullable
@@ -69,25 +69,19 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-    }
 
-    /**
-     * Init the List of meetings
-     */
-    private void initList() {
         mMeetings = mApiService.getMeetings();
-
-        mRecyclerView.setAdapter(new MyMeetingRecyclerViewAdapter(mMeetings));
+        mAdaptor = new MyMeetingRecyclerViewAdapter(mMeetings);
+        mRecyclerView.setAdapter(mAdaptor);
     }
 
-    public void reInitList() {
-        this.initList();
-    }
+    private void reInitList(int position, boolean isDeleteAction) {
+        mAdaptor.updateList(mApiService.getMeetings());
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        initList();
+        if (isDeleteAction)
+            mAdaptor.notifyItemInserted(position);
+        else
+            mAdaptor.notifyItemRemoved(position);
     }
 
     @Override
@@ -146,13 +140,13 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
                 String allAttendeesText = mAllAttendees.getText().toString();
                 List<String> allAttendees = new ArrayList<String>(Arrays.asList(allAttendeesText.split(",")));
                 Date startAt = new Date(2022, 1, 1, meetingStartHour, meetingStartMin);
-                MeetingRoom meetingRoom = actualMeetingRoomSelected;
 
-                Meeting newMeeting = new Meeting(System.currentTimeMillis(), title, meetingRoom, allAttendees, startAt);
+                Meeting newMeeting = new Meeting(System.currentTimeMillis(), title, actualMeetingRoomSelected, allAttendees, startAt);
                 mApiService.createMeeting(newMeeting);
+                mMeetings = mApiService.getMeetings();
 
                 dialog.dismiss();
-                initList();
+                reInitList(mMeetings.size() - 1, false);
             }
         });
     }
@@ -179,7 +173,9 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
      */
     @Subscribe
     public void onDeleteMeeting(DeleteMeetingEvent event) {
+        //TODO Doesn't work
+        int position = mMeetings.indexOf(event.meeting);
         mApiService.deleteMeeting(event.meeting);
-        initList();
+        reInitList(position, true);
     }
 }
