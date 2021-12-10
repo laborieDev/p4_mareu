@@ -27,8 +27,7 @@ import butterknife.ButterKnife;
 
 public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeetingRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Meeting> mMeetings;
-    private MeetingApiService meetingApiService;
+    private List<Meeting> mMeetings;
 
     public MyMeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetings = items;
@@ -84,5 +83,9 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
             super(view);
             ButterKnife.bind(this, view);
         }
+    }
+
+    public void updateList(List<Meeting> newList) {
+        mMeetings = newList;
     }
 }
