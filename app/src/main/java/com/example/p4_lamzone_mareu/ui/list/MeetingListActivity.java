@@ -78,7 +78,7 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
     private void reInitList(int position, boolean isDeleteAction) {
         mAdaptor.updateList(mApiService.getMeetings());
 
-        if (isDeleteAction)
+        if (!isDeleteAction)
             mAdaptor.notifyItemInserted(position);
         else
             mAdaptor.notifyItemRemoved(position);

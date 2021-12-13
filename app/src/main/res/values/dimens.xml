@@ -1,4 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="list_item_circle">50dp</dimen>
+
+    <dimen name="dialog_width">300dp</dimen>
+    <dimen name="inputs_dialog_margin">15dp</dimen>
 </resources>
