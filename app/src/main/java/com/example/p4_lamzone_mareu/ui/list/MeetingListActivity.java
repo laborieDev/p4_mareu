@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.SortedSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,12 +77,14 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
     }
 
     private void reInitList(int position, boolean isDeleteAction) {
-        mAdaptor.updateList(mApiService.getMeetings());
+        Meeting meeting = mMeetings.get(position);
 
-        if (!isDeleteAction)
+        if (!isDeleteAction) {
             mAdaptor.notifyItemInserted(position);
-        else
+        } else {
             mAdaptor.notifyItemRemoved(position);
+            mApiService.deleteMeeting(meeting);
+        }
     }
 
     @Override
@@ -132,23 +135,26 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
         dialog.findViewById(R.id.create).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextInputEditText mTitle = dialog.findViewById(R.id.meeting_title);
-                TextInputEditText mHour = dialog.findViewById(R.id.meeting_hour);
-                TextInputEditText mAllAttendees = dialog.findViewById(R.id.meeting_all_attendees);
-
-                String title = mTitle.getText().toString();
-                String allAttendeesText = mAllAttendees.getText().toString();
-                List<String> allAttendees = new ArrayList<String>(Arrays.asList(allAttendeesText.split(",")));
-                Date startAt = new Date(2022, 1, 1, meetingStartHour, meetingStartMin);
-
-                Meeting newMeeting = new Meeting(System.currentTimeMillis(), title, actualMeetingRoomSelected, allAttendees, startAt);
-                mApiService.createMeeting(newMeeting);
-                mMeetings = mApiService.getMeetings();
-
-                dialog.dismiss();
-                reInitList(mMeetings.size() - 1, false);
+                saveNewMeeting(dialog);
             }
         });
+    }
+
+    public void saveNewMeeting(Dialog dialog)
+    {
+        TextInputEditText mTitle = dialog.findViewById(R.id.meeting_title);
+        TextInputEditText mAllAttendees = dialog.findViewById(R.id.meeting_all_attendees);
+
+        String title = mTitle.getText().toString();
+        String allAttendeesText = mAllAttendees.getText().toString();
+        List<String> allAttendees = new ArrayList<String>(Arrays.asList(allAttendeesText.split(",")));
+        Date startAt = new Date(2022, 1, 1, meetingStartHour, meetingStartMin);
+
+        Meeting newMeeting = new Meeting(System.currentTimeMillis(), title, actualMeetingRoomSelected, allAttendees, startAt);
+        mMeetings = mApiService.createMeeting(newMeeting);
+
+        dialog.dismiss();
+        reInitList(mMeetings.size() - 1, false);
     }
 
     public void showTimePickerDialog(View v) {
@@ -173,9 +179,7 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
      */
     @Subscribe
     public void onDeleteMeeting(DeleteMeetingEvent event) {
-        //TODO Doesn't work
         int position = mMeetings.indexOf(event.meeting);
-        mApiService.deleteMeeting(event.meeting);
         reInitList(position, true);
     }
 }
