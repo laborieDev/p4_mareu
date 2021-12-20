@@ -9,4 +9,5 @@
     <string name="hint_input_meeting_name">Nom de la réunion</string>
     <string name="hint_input_meeting_email">Participants (séparés par une virgule)</string>
     <string name="hint_input_meeting_hour">Heure de début</string>
+    <string name="btn_add_save_label">Ajouter</string>
 </resources>
