@@ -1,10 +1,13 @@
 package com.example.p4_lamzone_mareu.ui.list;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +41,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
@@ -58,6 +63,8 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
     private int meetingStartHour = 7;
     private int meetingStartMin = 0;
     private MeetingRoom actualMeetingRoomSelected;
+
+    final Calendar myCalendar = Calendar.getInstance();
 
     @Override
     @Nullable
@@ -157,6 +164,11 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
         reInitList(mMeetings.size() - 1, false);
     }
 
+    public void showDatePickerDialog(View v) {
+        // https://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
+        //new DatePickerDialog(this, date, myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
@@ -181,5 +193,35 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
     public void onDeleteMeeting(DeleteMeetingEvent event) {
         int position = mMeetings.indexOf(event.meeting);
         reInitList(position, true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.search_btn);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+
+        searchView.setQueryHint("Rechercher une réunion ...");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                System.out.println("Text ["+ newText +"]");
+                mAdaptor.getFilter().filter(newText);
+
+                return false;
+            }
+        });
+
+
+        return super.onCreateOptionsMenu(menu);
     }
 }
