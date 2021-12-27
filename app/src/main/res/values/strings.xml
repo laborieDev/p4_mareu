@@ -10,4 +10,8 @@
     <string name="hint_input_meeting_email">Participants (séparés par une virgule)</string>
     <string name="hint_input_meeting_hour">Heure de début</string>
     <string name="btn_add_save_label">Ajouter</string>
+    <!-- INPUTS FILTERS -->
+    <string name="hint_input_startAt">Date de début</string>
+    <string name="hint_input_endAt">Date de fin</string>
+
 </resources>

@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.17395833333333333" />
+        <entry key="app/src/main/res/drawable-v24/search_icon.xml" value="0.28888888888888886" />
         <entry key="app/src/main/res/drawable/ic_circle_default.xml" value="0.17447916666666666" />
         <entry key="app/src/main/res/drawable/ic_circle_warning.xml" value="0.17447916666666666" />
         <entry key="app/src/main/res/drawable/ic_date_time_24dp.xml" value="0.31145833333333334" />
@@ -12,12 +13,17 @@
         <entry key="app/src/main/res/drawable/ic_new_icon.xml" value="0.3260416666666667" />
         <entry key="app/src/main/res/drawable/ic_person_add_white_24dp.xml" value="0.3260416666666667" />
         <entry key="app/src/main/res/layout-land/activity_add_meeting.xml" value="0.23333333333333334" />
+        <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.101911384427993" />
         <entry key="app/src/main/res/layout-land/activity_meeting_list.xml" value="0.24791666666666667" />
+        <entry key="app/src/main/res/layout-land/content_main.xml" value="0.3572916666666667" />
         <entry key="app/src/main/res/layout-land/fragment_meeting.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-land/fragment_meeting_list.xml" value="0.3572916666666667" />
+        <entry key="app/src/main/res/layout-land/viewholder_meeting.xml" value="0.3572916666666667" />
         <entry key="app/src/main/res/layout/activity_add_meeting.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29128205128205126" />
         <entry key="app/src/main/res/layout/activity_meeting_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/dialog_filter_meeting.xml" value="0.16111111111111112" />
         <entry key="app/src/main/res/layout/fragment_meeting.xml" value="0.33027886921214433" />
         <entry key="app/src/main/res/layout/fragment_meeting_list.xml" value="0.16770833333333332" />
         <entry key="app/src/main/res/layout/viewholder_meeting.xml" value="0.15885416666666666" />

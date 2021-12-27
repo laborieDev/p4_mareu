@@ -5,6 +5,8 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,17 +22,24 @@ import com.example.p4_lamzone_mareu.service.MeetingApiService;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeetingRecyclerViewAdapter.ViewHolder> {
+public class MyMeetingRecyclerViewAdapter
+        extends RecyclerView.Adapter<MyMeetingRecyclerViewAdapter.ViewHolder>
+        implements Filterable {
 
     private List<Meeting> mMeetings;
+    private List<Meeting> mMeetingsFiltered;
 
     public MyMeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetings = items;
+        mMeetingsFiltered = items;
     }
 
     @Override
@@ -43,7 +52,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Meeting meeting = mMeetings.get(position);
+        Meeting meeting = mMeetingsFiltered.get(position);
 
         String meetingStartAt = DI.getMeetingApiService().getStringStartAt(meeting);
 
@@ -66,7 +75,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     @Override
     public int getItemCount() {
-        return mMeetings.size();
+        return mMeetingsFiltered.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -87,6 +96,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     public void updateList(List<Meeting> newList) {
         mMeetings = newList;
+        mMeetingsFiltered = newList;
     }
 
     public void addMeeting(Meeting meeting) {
@@ -95,5 +105,46 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     public void removeMeeting(Meeting meeting) {
         mMeetings.remove(meeting);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    mMeetingsFiltered = mMeetings;
+                } else {
+                    List<Meeting> filteredList = new ArrayList<>();
+                    for (Meeting meeting : mMeetings) {
+                        String hourStartAt = DI.getMeetingApiService().getStringStartAt(meeting);
+
+                        if (
+                                meeting.getSubject().toLowerCase().contains(charString.toLowerCase()) ||
+                                meeting.getMeetingRoom().getName().toLowerCase().contains(charString.toLowerCase()) ||
+                                hourStartAt.contains(charString)
+                        ) {
+                            filteredList.add(meeting);
+                        }
+                    }
+
+                    mMeetingsFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mMeetingsFiltered;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mMeetingsFiltered = (ArrayList<Meeting>) filterResults.values;
+
+                // refresh the list with filtered data
+                notifyDataSetChanged();
+            }
+        };
     }
 }
