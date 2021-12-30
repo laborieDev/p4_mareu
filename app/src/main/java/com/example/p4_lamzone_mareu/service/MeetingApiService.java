@@ -27,6 +27,8 @@ public interface MeetingApiService {
      */
     List<Meeting> createMeeting(Meeting meeting);
 
+    List<Meeting> filterMeetings(CharSequence charSequence, List<Meeting> meetings);
+
     /**
      * Create a Meeting
      * @param position

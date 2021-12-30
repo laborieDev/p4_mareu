@@ -31,15 +31,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MyMeetingRecyclerViewAdapter
-        extends RecyclerView.Adapter<MyMeetingRecyclerViewAdapter.ViewHolder>
-        implements Filterable {
+        extends RecyclerView.Adapter<MyMeetingRecyclerViewAdapter.ViewHolder> {
 
     private List<Meeting> mMeetings;
-    private List<Meeting> mMeetingsFiltered;
 
     public MyMeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetings = items;
-        mMeetingsFiltered = items;
     }
 
     @Override
@@ -52,7 +49,7 @@ public class MyMeetingRecyclerViewAdapter
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Meeting meeting = mMeetingsFiltered.get(position);
+        Meeting meeting = mMeetings.get(position);
 
         String meetingStartAt = DI.getMeetingApiService().getStringStartAt(meeting);
 
@@ -75,7 +72,7 @@ public class MyMeetingRecyclerViewAdapter
 
     @Override
     public int getItemCount() {
-        return mMeetingsFiltered.size();
+        return mMeetings.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -96,7 +93,6 @@ public class MyMeetingRecyclerViewAdapter
 
     public void updateList(List<Meeting> newList) {
         mMeetings = newList;
-        mMeetingsFiltered = newList;
     }
 
     public void addMeeting(Meeting meeting) {
@@ -105,46 +101,5 @@ public class MyMeetingRecyclerViewAdapter
 
     public void removeMeeting(Meeting meeting) {
         mMeetings.remove(meeting);
-    }
-
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                String charString = charSequence.toString();
-                if (charString.isEmpty()) {
-                    mMeetingsFiltered = mMeetings;
-                } else {
-                    List<Meeting> filteredList = new ArrayList<>();
-                    for (Meeting meeting : mMeetings) {
-                        String hourStartAt = DI.getMeetingApiService().getStringStartAt(meeting);
-
-                        if (
-                                meeting.getSubject().toLowerCase().contains(charString.toLowerCase()) ||
-                                meeting.getMeetingRoom().getName().toLowerCase().contains(charString.toLowerCase()) ||
-                                hourStartAt.contains(charString)
-                        ) {
-                            filteredList.add(meeting);
-                        }
-                    }
-
-                    mMeetingsFiltered = filteredList;
-                }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = mMeetingsFiltered;
-
-                return filterResults;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                mMeetingsFiltered = (ArrayList<Meeting>) filterResults.values;
-
-                // refresh the list with filtered data
-                notifyDataSetChanged();
-            }
-        };
     }
 }

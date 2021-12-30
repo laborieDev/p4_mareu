@@ -5,7 +5,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
-android:padding="10dp"
+android:padding="@dimen/fab_padding"
 android:orientation="vertical">
 
     <ImageView
@@ -32,7 +32,7 @@ android:orientation="vertical">
             android:id="@+id/item_list_resume_datas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="@dimen/text_margin"
             android:textStyle="bold"
             tools:text="@string/app_name" />
 
@@ -42,7 +42,7 @@ android:orientation="vertical">
             android:layout_height="wrap_content"
             android:lines="1"
             android:singleLine="true"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="@dimen/text_margin"
             android:textStyle="normal"
             tools:text="@string/app_name"
             tools:ignore="MissingConstraints" />
@@ -53,7 +53,7 @@ android:orientation="vertical">
     android:id="@+id/item_list_delete_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="16dp"
+    android:layout_marginEnd="@dimen/fab_margin"
     android:background="@null"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"

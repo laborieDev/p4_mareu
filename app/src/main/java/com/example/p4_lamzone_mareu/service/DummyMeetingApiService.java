@@ -2,6 +2,7 @@ package com.example.p4_lamzone_mareu.service;
 
 import android.os.Build;
 
+import com.example.p4_lamzone_mareu.di.DI;
 import com.example.p4_lamzone_mareu.model.Meeting;
 import com.example.p4_lamzone_mareu.model.MeetingRoom;
 
@@ -76,5 +77,30 @@ public class DummyMeetingApiService implements MeetingApiService {
         }
 
         return meetingRoomsArray;
+    }
+
+    @Override
+    public List<Meeting> filterMeetings(CharSequence charSequence, List<Meeting> meetings)
+    {
+        List<Meeting> meetingsFiltered = new ArrayList<>();
+
+        String charString = charSequence.toString();
+        if (charString.isEmpty()) {
+            meetingsFiltered = meetings;
+        } else {
+            for (Meeting meeting : meetings) {
+                String hourStartAt = DI.getMeetingApiService().getStringStartAt(meeting);
+
+                if (
+                    meeting.getSubject().toLowerCase().contains(charString.toLowerCase()) ||
+                    meeting.getMeetingRoom().getName().toLowerCase().contains(charString.toLowerCase()) ||
+                    hourStartAt.contains(charString)
+                ) {
+                    meetingsFiltered.add(meeting);
+                }
+            }
+        }
+
+        return meetingsFiltered;
     }
 }
