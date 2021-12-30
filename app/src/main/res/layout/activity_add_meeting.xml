@@ -52,11 +52,11 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_input_meeting_hour"
                 android:onClick="showTimePickerDialog"
-                android:text="7:00" />
+                android:text="@string/hint_input_meeting_hour_default" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
-            android:id="@+id/spinner1"
+            android:id="@+id/meeting_room_choice"
             android:layout_margin="@dimen/inputs_dialog_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

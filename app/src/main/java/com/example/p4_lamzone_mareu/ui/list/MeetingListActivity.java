@@ -13,6 +13,8 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -50,12 +52,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MeetingListActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
+public class MeetingListActivity extends AppCompatActivity
+        implements TimePickerDialog.OnTimeSetListener, Filterable {
 
     private MeetingApiService mApiService;
     private List<Meeting> mMeetings;
+    private List<Meeting> mMeetingsFiltered;
 
-    @BindView(R.id.list_neighbours)
+    @BindView(R.id.list_meetings)
     public RecyclerView mRecyclerView;
     public MyMeetingRecyclerViewAdapter mAdaptor;
 
@@ -64,7 +68,7 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
     private int meetingStartMin = 0;
     private MeetingRoom actualMeetingRoomSelected;
 
-    final Calendar myCalendar = Calendar.getInstance();
+    String searchTextValue;
 
     @Override
     @Nullable
@@ -88,9 +92,12 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
 
         if (!isDeleteAction) {
             mAdaptor.notifyItemInserted(position);
+            if (searchTextValue != null)
+                getFilter().filter(searchTextValue);
         } else {
             mAdaptor.notifyItemRemoved(position);
             mApiService.deleteMeeting(meeting);
+            mMeetingsFiltered.remove(meeting);
         }
     }
 
@@ -121,7 +128,7 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
         // Init all MeetingRooms for Select
         MeetingRoom[] meetingRooms = mApiService.getMeetingRooms();
         // Init MeetingRooms Select
-        Spinner spinner = dialog.findViewById(R.id.spinner1);
+        Spinner spinner = dialog.findViewById(R.id.meeting_room_choice);
 
         MeetingRoomSpinnerAdapter adapter = new MeetingRoomSpinnerAdapter(MeetingListActivity.this,
                 android.R.layout.simple_spinner_item, meetingRooms);
@@ -164,11 +171,6 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
         reInitList(mMeetings.size() - 1, false);
     }
 
-    public void showDatePickerDialog(View v) {
-        // https://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
-        //new DatePickerDialog(this, date, myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-    }
-
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
@@ -186,9 +188,6 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
         meetingStartMin = minute;
     }
 
-    /**
-     * Fired if the user clicks on a delete button
-     */
     @Subscribe
     public void onDeleteMeeting(DeleteMeetingEvent event) {
         int position = mMeetings.indexOf(event.meeting);
@@ -213,15 +212,33 @@ public class MeetingListActivity extends AppCompatActivity implements TimePicker
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                System.out.println("Text ["+ newText +"]");
-                mAdaptor.getFilter().filter(newText);
+                searchTextValue = newText;
+                getFilter().filter(newText);
 
                 return false;
             }
         });
 
-
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                mMeetingsFiltered = mApiService.filterMeetings(charSequence, mMeetings);
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mMeetingsFiltered;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mAdaptor.updateList(mMeetingsFiltered);
+                mAdaptor.notifyDataSetChanged();
+            }
+        };
     }
 }

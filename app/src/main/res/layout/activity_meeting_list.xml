@@ -9,12 +9,12 @@
     tools:context=".ui.list.MeetingListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_neighbours"
+        android:id="@+id/list_meetings"
         android:name="com.openclassrooms.entrevoisins.ui.neighbour_list.NeighbourFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
         app:layoutManager="LinearLayoutManager"
         tools:context=".ui.list.MeetingFragment"
         tools:listitem="@layout/viewholder_meeting"/>
@@ -26,7 +26,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/colorAccent"
-        app:tint="#FFF"
+        app:tint="@color/white"
         app:srcCompat="@drawable/ic_new_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
