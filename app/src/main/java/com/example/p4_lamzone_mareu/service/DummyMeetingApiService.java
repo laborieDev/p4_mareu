@@ -26,8 +26,6 @@ public class DummyMeetingApiService implements MeetingApiService {
      */
     @Override
     public List<Meeting> getMeetings() {
-        Collections.sort(meetings);
-
         return meetings;
     }
 
@@ -42,11 +40,19 @@ public class DummyMeetingApiService implements MeetingApiService {
     /**
      * {@inheritDoc}
      * @param meeting
-     */
     @Override
     public List<Meeting> createMeeting(Meeting meeting) {
         meetings.add(meeting);
         return meetings;
+    }*/
+
+    /**
+     * {@inheritDoc}
+     * @param meeting
+     */
+    @Override
+    public void createMeeting(Meeting meeting) {
+        meetings.add(meeting);
     }
 
     public Meeting getMeeting(int position)
@@ -58,13 +64,6 @@ public class DummyMeetingApiService implements MeetingApiService {
     public void saveMeeting(Meeting meeting) {
         int position = meetings.indexOf(meeting);
         meetings.set(position, meeting);
-    }
-
-    public String getStringStartAt(Meeting meeting) {
-        Date meetingStartAtDate = meeting.getStartAt();
-        DecimalFormat df = new DecimalFormat("00");
-
-        return meetingStartAtDate.getHours() + ":" + df.format(meetingStartAtDate.getMinutes());
     }
 
     public MeetingRoom[] getMeetingRooms() {
@@ -89,7 +88,7 @@ public class DummyMeetingApiService implements MeetingApiService {
             meetingsFiltered = meetings;
         } else {
             for (Meeting meeting : meetings) {
-                String hourStartAt = DI.getMeetingApiService().getStringStartAt(meeting);
+                String hourStartAt = meeting.getStringStartAt();
 
                 if (
                     meeting.getSubject().toLowerCase().contains(charString.toLowerCase()) ||

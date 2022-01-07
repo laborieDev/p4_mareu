@@ -23,18 +23,17 @@ public abstract class DummyMeetingGenerator {
                     Arrays.asList("anthony@email.com", "timothe@email.com", "anna@email.com"),
                     getDate(14, 0)
             ),
-
-            new Meeting(
-                    3, "Réunion C",
-                    DUMMY_MEETINGS_ROOMS.get(2),
-                    Arrays.asList("anna@email.com", "anthony@email.com"),
-                    getDate(23, 0)
-            ),
             new Meeting(
                     2, "Réunion B",
                     DUMMY_MEETINGS_ROOMS.get(1),
                     Arrays.asList("timothe@email.com", "anna@email.com"),
                     getDate(16, 0)
+            ),
+            new Meeting(
+                    3, "Réunion C",
+                    DUMMY_MEETINGS_ROOMS.get(2),
+                    Arrays.asList("anna@email.com", "anthony@email.com"),
+                    getDate(23, 0)
             )
     );
 

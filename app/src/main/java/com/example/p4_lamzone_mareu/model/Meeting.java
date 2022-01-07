@@ -1,6 +1,7 @@
 package com.example.p4_lamzone_mareu.model;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Meeting implements Serializable, Comparable<Meeting> {
     private MeetingRoom meetingRoom;
 
     /** All Attendees */
-    private List<String> allAttendees;
+    private final List<String> allAttendees;
 
     /** Start at */
     private Date startAt;
@@ -82,6 +83,13 @@ public class Meeting implements Serializable, Comparable<Meeting> {
 
     public void setStartAt(Date startAt) {
         this.startAt = startAt;
+    }
+
+    public String getStringStartAt() {
+        Date meetingStartAtDate = getStartAt();
+        DecimalFormat df = new DecimalFormat("00");
+
+        return meetingStartAtDate.getHours() + ":" + df.format(meetingStartAtDate.getMinutes());
     }
 
     @Override

@@ -51,7 +51,7 @@ public class MyMeetingRecyclerViewAdapter
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Meeting meeting = mMeetings.get(position);
 
-        String meetingStartAt = DI.getMeetingApiService().getStringStartAt(meeting);
+        String meetingStartAt = meeting.getStringStartAt();
 
         String resumeDatas =
                 meeting.getSubject() + " - " + meetingStartAt + " - " +meeting.getMeetingRoom().getName();

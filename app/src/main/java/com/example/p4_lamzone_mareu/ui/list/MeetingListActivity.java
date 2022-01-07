@@ -44,6 +44,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
@@ -56,8 +57,8 @@ public class MeetingListActivity extends AppCompatActivity
         implements TimePickerDialog.OnTimeSetListener, Filterable {
 
     private MeetingApiService mApiService;
-    private List<Meeting> mMeetings;
-    private List<Meeting> mMeetingsFiltered;
+    private List<Meeting> mMeetings = new ArrayList<>();
+    private List<Meeting> mMeetingsFiltered = new ArrayList<>();
 
     @BindView(R.id.list_meetings)
     public RecyclerView mRecyclerView;
@@ -87,7 +88,7 @@ public class MeetingListActivity extends AppCompatActivity
         mRecyclerView.setAdapter(mAdaptor);
     }
 
-    private void reInitList(int position, boolean isDeleteAction) {
+    private void reInitList(int position, Boolean isDeleteAction) {
         Meeting meeting = mMeetings.get(position);
 
         if (!isDeleteAction) {
@@ -114,7 +115,7 @@ public class MeetingListActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.add_meeting)
-    void addNeighbour() {
+    void addMeeting() {
         // Init Dialog
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -125,25 +126,9 @@ public class MeetingListActivity extends AppCompatActivity
         mEditHourText = dialog.findViewById(R.id.meeting_hour);
         mEditHourText.setFocusable(false);
 
-        // Init all MeetingRooms for Select
-        MeetingRoom[] meetingRooms = mApiService.getMeetingRooms();
         // Init MeetingRooms Select
         Spinner spinner = dialog.findViewById(R.id.meeting_room_choice);
-
-        MeetingRoomSpinnerAdapter adapter = new MeetingRoomSpinnerAdapter(MeetingListActivity.this,
-                android.R.layout.simple_spinner_item, meetingRooms);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        // Init Select On Change Listener
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                actualMeetingRoomSelected = adapter.getItem(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+        initMeetingRoomsSpinner(spinner);
 
         // Save new Meeting Listener
         dialog.findViewById(R.id.create).setOnClickListener(new View.OnClickListener() {
@@ -165,7 +150,8 @@ public class MeetingListActivity extends AppCompatActivity
         Date startAt = new Date(2022, 1, 1, meetingStartHour, meetingStartMin);
 
         Meeting newMeeting = new Meeting(System.currentTimeMillis(), title, actualMeetingRoomSelected, allAttendees, startAt);
-        mMeetings = mApiService.createMeeting(newMeeting);
+        mApiService.createMeeting(newMeeting);
+        mMeetings = mApiService.getMeetings();
 
         dialog.dismiss();
         reInitList(mMeetings.size() - 1, false);
@@ -174,6 +160,25 @@ public class MeetingListActivity extends AppCompatActivity
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public void initMeetingRoomsSpinner(Spinner spinner) {
+        MeetingRoom[] meetingRooms = mApiService.getMeetingRooms();
+
+        MeetingRoomSpinnerAdapter adapter = new MeetingRoomSpinnerAdapter(MeetingListActivity.this,
+                android.R.layout.simple_spinner_item, meetingRooms);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        // Init Select On Change Listener
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                actualMeetingRoomSelected = adapter.getItem(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     @Override

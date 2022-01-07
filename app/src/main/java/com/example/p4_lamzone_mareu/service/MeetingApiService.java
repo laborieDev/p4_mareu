@@ -25,7 +25,7 @@ public interface MeetingApiService {
      * Create a Meeting
      * @param meeting
      */
-    List<Meeting> createMeeting(Meeting meeting);
+    void createMeeting(Meeting meeting);
 
     List<Meeting> filterMeetings(CharSequence charSequence, List<Meeting> meetings);
 
@@ -41,8 +41,6 @@ public interface MeetingApiService {
      * @param meeting
      */
     void saveMeeting(Meeting meeting);
-
-    String getStringStartAt(Meeting meeting);
 
     MeetingRoom[] getMeetingRooms();
 }

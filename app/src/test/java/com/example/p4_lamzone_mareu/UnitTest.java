@@ -47,7 +47,8 @@ public class UnitTest {
                 DummyMeetingGenerator.getDate(16, 0)
         );
 
-        List<Meeting> allMeetings = service.createMeeting(newMeeting);
+        service.createMeeting(newMeeting);
+        List<Meeting> allMeetings = service.getMeetings();
 
         assertEquals(newMeeting, allMeetings.get(allMeetings.size() - 1));
     }
