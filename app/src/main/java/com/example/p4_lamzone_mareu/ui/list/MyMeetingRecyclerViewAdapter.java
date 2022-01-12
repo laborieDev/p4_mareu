@@ -2,6 +2,7 @@ package com.example.p4_lamzone_mareu.ui.list;
 
 import android.graphics.Color;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,6 @@ public class MyMeetingRecyclerViewAdapter
         return new ViewHolder(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Meeting meeting = mMeetings.get(position);
@@ -57,7 +57,7 @@ public class MyMeetingRecyclerViewAdapter
                 meeting.getSubject() + " - " + meetingStartAt + " - " +meeting.getMeetingRoom().getName();
         holder.mMeetingResumeDatas.setText(resumeDatas);
 
-        holder.mMeetingAttendees.setText(String.join(", ", meeting.getAllAttendees()));
+        holder.mMeetingAttendees.setText(TextUtils.join(", ", meeting.getAllAttendees()));
 
         int meetingRoomColor = Color.parseColor(meeting.getMeetingRoom().getColor());
         holder.mMeetingCircle.setColorFilter(meetingRoomColor);
