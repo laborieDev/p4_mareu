@@ -36,11 +36,5 @@ public interface MeetingApiService {
      */
     Meeting getMeeting(int position);
 
-    /**
-     * Save a Meeting
-     * @param meeting
-     */
-    void saveMeeting(Meeting meeting);
-
     MeetingRoom[] getMeetingRooms();
 }

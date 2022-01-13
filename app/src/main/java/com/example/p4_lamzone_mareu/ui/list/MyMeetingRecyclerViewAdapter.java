@@ -94,12 +94,4 @@ public class MyMeetingRecyclerViewAdapter
     public void updateList(List<Meeting> newList) {
         mMeetings = newList;
     }
-
-    public void addMeeting(Meeting meeting) {
-        mMeetings.add(meeting);
-    }
-
-    public void removeMeeting(Meeting meeting) {
-        mMeetings.remove(meeting);
-    }
 }

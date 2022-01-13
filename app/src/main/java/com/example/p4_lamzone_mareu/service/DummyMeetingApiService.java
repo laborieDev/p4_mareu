@@ -60,12 +60,6 @@ public class DummyMeetingApiService implements MeetingApiService {
         return meetings.get(position);
     }
 
-    @Override
-    public void saveMeeting(Meeting meeting) {
-        int position = meetings.indexOf(meeting);
-        meetings.set(position, meeting);
-    }
-
     public MeetingRoom[] getMeetingRooms() {
         MeetingRoom[] meetingRoomsArray = new MeetingRoom[meetingsRooms.size()];
         int i = 0;
