@@ -40,15 +40,6 @@ public class DummyMeetingApiService implements MeetingApiService {
     /**
      * {@inheritDoc}
      * @param meeting
-    @Override
-    public List<Meeting> createMeeting(Meeting meeting) {
-        meetings.add(meeting);
-        return meetings;
-    }*/
-
-    /**
-     * {@inheritDoc}
-     * @param meeting
      */
     @Override
     public void createMeeting(Meeting meeting) {
